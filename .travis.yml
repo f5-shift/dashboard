@@ -1,9 +1,11 @@
+language: node_js
 deploy:
   provider: s3
   access_key_id: AKIAJ6M5JDXDTHXNKV6A
   secret_access_key:
     secure: fTKULzPgWpaO11iUF9+sBuulLCYxQ5DsI8di66HdQAn3yaPecswoamlJSONp3k65pDFZ9T9lml9ZvXUVNFL6ojU8AKEB3e3f5vlse0OAO7nFrHC66uN94OKb4yUb6v6jppheLp/yzOu6vAn5+3jWO3x7PgXAzer6Tie7VBhZPvDuNIc92l5WvttgoUd1g2CLRFm9Jw4xjdhDkZ4VkrPZghHvLLrepHDOrjR04ZfwDPIhtHMjVxmy1KkTQ1+o1tsL9A9NJCw2I44ud2MnjdH0gJ0167NUJPZiArg8ZOlgZB3ErffJNc+lFmSLCp/3TdyA0pouaZlbV5rywn2XxqKICe/rd40AHvJK+PXIng27dc1s5ePhABb/vzPkYQoR2aj7MI+aGkxH0EmbX/UgL9gxalN1FNSre88kX7w43VnkpnBIKjm+YlmgV8Q0SvOsvHPPC9Kr3E9OP3zqwpNsRVvzrFBxGdl9KPbN2njYBFpRAcu/WZEm09MY/1nosxseB5gQPjOo/jiL1+oz5SDTpSD9/wuUQwiw5Ba2omNk/HQP2tqiqcDSKda7kf/+qs12T1k833khSsC44Kh+UWg06cp45+Z4okBlKVw/I262wo7fT2zbVRf729yL7bRFVk67XwYN2XNFEly9RQ/xgMqPjJWu+mcebWMbsRcnAv/z0yXIMkw=
   bucket: f5shift-dashboard
+  region: eu-west-2
   acl: public_read
   on:
     repo: f5-shift/dashboard
