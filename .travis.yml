@@ -1,3 +1,12 @@
+language: node_js
+node_js:
+  - "stable"
+cache:
+  directories:
+    - node_modules
+script:
+  - npm run build
+
 deploy:
   provider: s3
   access_key_id: AKIAJ6M5JDXDTHXNKV6A
@@ -6,5 +15,6 @@ deploy:
   bucket: f5shift-dashboard
   region: eu-west-2
   acl: public_read
+  local_dir: build
   on:
     repo: f5-shift/dashboard
