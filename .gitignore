@@ -62,3 +62,9 @@ typings/
 
 # build
 build/
+
+# macOS temporary files
+.DS_Store
+
+# Others
+*.py
