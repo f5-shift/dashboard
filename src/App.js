@@ -47,7 +47,7 @@ class App extends Component {
     
     const { data } = await axios.get(`https://ow4i80xiv1.execute-api.eu-west-2.amazonaws.com/beta/dashboard?flightCode=${flightCode}&flightClass=${flightClass}&date=${formattedDate}`)
     if (!data) {
-      alert('Nothing found')
+      alert(`No details found for ${flightCode}`)
       this.setState({ childView: undefined })
       return
     }

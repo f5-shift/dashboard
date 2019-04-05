@@ -21,7 +21,7 @@ class NavBar extends Component {
                   Overview
                 </a>
               </li>
-              <li className="nav-item" style={{paddingLeft: '15px', width: '75vw'}}>
+              <li className="nav-item" style={{paddingLeft: '15px', width: '50vw'}}>
                 <div className="search-bar-bg row no-gutters align-items-center" style={{ width: '100%'}}>
                   <div className="col-auto search-transparent">
                     <i className="fas fa-search "></i>
@@ -43,10 +43,10 @@ class NavBar extends Component {
                       }}
                       style={{ marginRight: '16px' }}
                     />
-                    <label className="radio-inline"><input type="radio" name="economy" onChange={setClass} checked={flightClass === 'economy'} />
+                    <label className="radio-inline"><input type="radio" name="economy" onChange={setClass} checked={flightClass === 'economy'} style={{ marginLeft: '4px', marginRight: '4px' }}/>
                       Y
                     </label>&nbsp;
-                    <label className="radio-inline"><input type="radio" name="business" onChange={setClass} checked={flightClass === 'business'} />J</label>
+                    <label className="radio-inline"><input type="radio" name="business" onChange={setClass} checked={flightClass === 'business'} style={{ marginLeft: '4px', marginRight: '4px' }} />J</label>
                     <button className="btn btn-sm btn-success" type="submit" onClick={searchQuery}
                       style={{ marginLeft: '16px' }}
                       disabled={flightCode.trim() === '' || flightClass.trim() === '' || !date}

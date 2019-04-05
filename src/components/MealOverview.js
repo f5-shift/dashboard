@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { MDBDataTable } from 'mdbreact';
-import { Pie } from 'react-chartjs-2';
 import axios from 'axios';
+import FoodOverview from './FoodOverview';
 
 class MealOverview extends Component {
 
   constructor(props) {
     super(props)
+    this.refresh = this.refresh.bind(this)
     this.updateFoodWaste = this.updateFoodWaste.bind(this)
   }
 
@@ -26,11 +26,11 @@ class MealOverview extends Component {
       },
     ],
     rows: [],
-    pieLabels: [],
-    pieDatasets: [],
+    labels: [],
+    datasets: [],
   }
 
-  async componentDidMount() {
+  async refresh() {
     const { view: meal, flight: { flightCode, flightClass, date } } = this.props
     const { mealCode } = meal
 
@@ -41,7 +41,12 @@ class MealOverview extends Component {
     const foodWaste = data.map(item => item.foodItems)
     console.log(foodWaste)
     
-    this.updateFoodWaste(foodWaste)
+    const payload = this.updateFoodWaste(foodWaste)
+    this.setState({ lastUpdated: new Date(), ...payload })
+  }
+
+  async componentDidMount() {
+    await this.refresh() 
   }
 
   updateFoodWaste(foodWaste) {
@@ -83,7 +88,7 @@ class MealOverview extends Component {
       }
     ]
 
-    this.setState({ rows, labels, datasets })
+    return { rows, labels, datasets }
   }
 
   render() {
@@ -93,48 +98,12 @@ class MealOverview extends Component {
       <>
         <ol className="breadcrumb" style={{ backgroundColor: 'transparent' }}>
           <div className="breadcrumb-item active" style={{ fontSize: '20px', color: '#4F4F4F', paddingTop: '20px' }}>
-            > {mealCode.toUpperCase()} - {mealName}
+            <i className="fas fa-chevron-right"></i>&nbsp;&nbsp;{mealCode.toUpperCase()} - {mealName} &nbsp;&nbsp;
+            <i className="fas fa-sync" onClick={this.refresh}></i>
           </div>
         </ol>
 
-        <div className="row">
-          <div className="col-xl-7 col-xs-12">
-            <div className="card ">
-              <div className="card-header">
-                <i className="fas fa-chart-area"></i>
-                &nbsp;&nbsp;Breakdown
-              </div>
-              <div className="card-body">
-                <Pie data={{
-                  labels: this.state.labels,
-                  datasets: this.state.datasets
-                }} />
-              </div>
-              <div className="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-            </div>
-          </div>
-
-          <div className="col-xl-5 col-xs-12">
-            <div className="card ">
-              <div className="card-header">
-                <i className="fas fa-table"></i>
-                &nbsp;&nbsp;List
-              </div>
-              <div className="card-body">
-                <MDBDataTable 
-                  striped
-                  bordered
-                  hover
-                  data={{
-                    columns: this.state.columns,
-                    rows: this.state.rows
-                  }}
-                />
-              </div>
-              <div className="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-            </div>
-          </div>
-        </div>
+        <FoodOverview {...this.state} />
       </>
     );
   }
