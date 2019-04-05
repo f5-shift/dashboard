@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import MealOverview from './MealOverview'
 import axios from 'axios';
 
-const capitalise = words => words.split(' ').map(word => word.split('').map((x, i) => i == 0 ? x.toUpperCase() : x).join('')).join(' ')
+const capitalise = words => words.split(' ').map(word => word.split('').map((x, i) => i === 0 ? x.toUpperCase() : x).join('')).join(' ')
 
 
 class MealClassOverview extends Component {
@@ -14,25 +14,12 @@ class MealClassOverview extends Component {
     this.refresh = this.refresh.bind(this)
   }
 
+  images = [
+    'fish.png', 'steak.png', 'broccoli.png'
+  ]
+
   state = {
     loading: false,
-    meals: [
-      {
-        mealCode: 'A',
-        mealName: 'Fish',
-        percentage: 20
-      },
-      {
-        mealCode: 'B',
-        mealName: 'Beef',
-        percentage: 15
-      },
-      {
-        mealCode: 'C',
-        mealName: 'Chicken',
-        percentage: 8
-      },
-    ],
     meals: [],
     selectedMeal: undefined
   }
@@ -41,15 +28,16 @@ class MealClassOverview extends Component {
     const { view: { flightCode, flightClass, date } } = this.props
 
     const { data: meals } = await axios.get(`https://ow4i80xiv1.execute-api.eu-west-2.amazonaws.com/beta/dashboard/meals?flightCode=${flightCode}&flightClass=${flightClass}&date=${date}`)
-    this.setState({ meals })
+    console.log(meals)
+    this.setState({ meals, selectedMeal: undefined })
   }
 
   async componentDidMount() {
     await this.refresh()
   }
 
-  async componentDidUpdate() {
-    await this.refresh()
+  async componentDidUpdate(prevProps, prevState) {
+    if (prevProps.view !== this.props.view) await this.refresh()
   }
 
   onSelectedMeal = selectedMeal => event => this.setState({ selectedMeal })
@@ -67,9 +55,6 @@ class MealClassOverview extends Component {
           !loading && 
           <div className="container-fluid" style={{ paddingRight: '25px', paddingLeft: '25px'}}>
             <ol className="breadcrumb" style={{backgroundColor: 'transparent'}}>
-              {/* <!-- <li className="breadcrumb-item">
-                <a href="#">Dashboard</a>
-              </li> --> */}
               <div className="breadcrumb-item active" style={{fontSize: '20px', color: '#4F4F4F', paddingTop: '20px'}}>
                 > {flightCode} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                  {from} <i className="fas fa-fighter-jet" style={{color: '#F5A623'}}></i> {to} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -85,7 +70,7 @@ class MealClassOverview extends Component {
                 >
                   <div className="card-body">
                     <div className="card-body-icon" style={{opacity: 100}}>
-                      <img src="img/fish.png" />
+                      
                     </div>
                     <h3 className="mr-5">Overview</h3>
                   </div>
@@ -99,10 +84,10 @@ class MealClassOverview extends Component {
                     >
                       <div className="card-body">
                         <div className="card-body-icon" style={{opacity: 100}}>
-                          <img src="img/fish.png" />
+                          <img src={`/img/${this.images[idx % this.images.length]}`} alt=""/>
                         </div>
                         <h3 className="mr-5">{meal.mealCode.toUpperCase()}</h3>
-                        <p><strong>{meal.date} - {meal.endDate}</strong></p>
+                        <p>{meal.date} to {meal.endDate}</p>
                       </div>
                     </div>
                   </div>

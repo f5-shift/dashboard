@@ -4,6 +4,7 @@ import Overview from './components/Overview';
 import MealClassOverview from './components/MealClassOverview';
 import NonMealClassOverview from './components/NonMealClassOverview';
 import axios from 'axios';
+import { formatDate } from 'react-day-picker/moment';
 
 class App extends Component {
 
@@ -13,12 +14,12 @@ class App extends Component {
     this.setClass = this.setClass.bind(this)
     this.onFlightChange = this.onFlightChange.bind(this)
     this.searchQuery = this.searchQuery.bind(this)
+    this.handleDayChange = this.handleDayChange.bind(this)
   }
 
   state = {
     flightCode: '',
     flightClass: '',
-    date: '2019-01-01',
     // childView: {
     //   flightCode: 'SQ856',
     //   from: 'SIN',
@@ -27,8 +28,11 @@ class App extends Component {
     //   flightClass: 'economy',
     //   hasMeal: true
     // },
+    date: undefined,
     childView: undefined
   }
+
+  handleDayChange = (date, _, __) => this.setState({ date })
 
   onFlightChange = event => this.setState({ flightCode: event.target.value })
 
@@ -38,8 +42,10 @@ class App extends Component {
 
   searchQuery = async event => {
     const { flightCode, flightClass, date } = this.state
+
+    const formattedDate = formatDate(date, 'YYYY[-]MM[-]DD', 'en')
     
-    const { data } = await axios.get(`https://ow4i80xiv1.execute-api.eu-west-2.amazonaws.com/beta/dashboard?flightCode=${flightCode}&flightClass=${flightClass}&date=${date}`)
+    const { data } = await axios.get(`https://ow4i80xiv1.execute-api.eu-west-2.amazonaws.com/beta/dashboard?flightCode=${flightCode}&flightClass=${flightClass}&date=${formattedDate}`)
     if (!data) {
       alert('Nothing found')
       this.setState({ childView: undefined })
@@ -50,7 +56,7 @@ class App extends Component {
   }
 
   render() {
-    const { childView, flightClass, flightCode, date } = this.state
+    const { childView, flightClass, flightCode, date, validDate } = this.state
     return (
       <>
       <NavBar view={childView} 
@@ -60,7 +66,9 @@ class App extends Component {
         flightClass={flightClass}
         flightCode={flightCode}
         date={date}
+        validDate={validDate}
         searchQuery={this.searchQuery}
+        handleDayChange={this.handleDayChange}
       />
       {
         !childView && <Overview /> 
